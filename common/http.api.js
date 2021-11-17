@@ -20,6 +20,7 @@ const install = (Vue, vm) => {
 	//购物车
 	//购物车列表
 	let getCartList=()=>vm.$u.get(`/api/carts?include=goods`)
+	let selectCar=(cart_ids)=>vm.$u.post(`/api/carts/checked`,{cart_ids,_method:'PATCH'})
 	
 	//user数据
 	//登录
@@ -49,7 +50,7 @@ const install = (Vue, vm) => {
 	let getOrderDetail=(id)=>vm.$u.get(`/api/orders/${id}`)
 	
 	
-	/**
+	/*
 	 * 用户信息更新
 	 */
 	//获取上传头像token
@@ -62,7 +63,7 @@ const install = (Vue, vm) => {
 	// 将各个定义的接口名称，统一放进对象挂载到vm.$u.api(因为vm就是this，也即this.$u.api)下
 	vm.$u.api = {getSlides, getSortGoods,userLogin,getUserData,getGoodsDetail,collectGoods,getCartList,getGoodsDetail1,getOrderList,
 	getOrderDetail,getCollectList,getAddressList,setAddress,getAddressODetail,updateAddressODetail,getOssToken,updateTitleImg,updateName,
-	getCartList
+	getCartList,selectCar
 	}
 }
 

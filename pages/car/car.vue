@@ -11,28 +11,57 @@
 				<u-swipe-action :show="item.show" :index="index" v-for="(item, index) in list" :key="item.id"
 					@click="click" @open="open" :options="options" class="">
 					<view class="item u-border-bottom">
-						<image mode="aspectFill" :src="item.images" />
+						<image mode="aspectFill" :src="item.goods?item.goods.cover_url:''" />
 						<!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
 						<view class="title-wrap info">
-							<text class="title u-line-1">{{ item.title }}</text>
+							<text class="title u-line-1">{{ item.goods?item.goods.title:'' }}</text>
 							<view class="u-m-t-20">
-								<u-number-box :step="1"></u-number-box>
+								<u-number-box :step="1" v-model='item.num'></u-number-box>
 							</view>
-							<view class="u-m-t-20">
-								¥520
+							<view class="u-m-t-20 price">
+								¥{{ item.goods.price}}
 							</view>
 						</view>
 						<view class="u-m-l-40 u-m-t-65">
-							<u-radio-group v-model="selectValue" size='50'>
-								<u-radio active-color='#008c8c' :name='index' @change='change'></u-radio>
+							<u-radio-group v-model="item.checked" size='50' @click.native='change(index)'>
+								<u-radio active-color='#008c8c'></u-radio>
 							</u-radio-group>
 						</view>
 					</view>
 				</u-swipe-action>
-				<view class="">
-					hello
-				</view>
 			</scroll-view>
+		</view>
+		<view class="u-m-t-30 floor">
+			<view class="price">
+				<view class="left">
+					Price
+				</view>
+				<view class="right">
+					¥520
+				</view>
+			</view>
+			<view class="freight">
+				<view class="left">
+					Freight
+				</view>
+				<view class="right">
+					1314
+				</view>
+			</view>
+		</view>
+
+		<view class="u-m-t-20 floor-2">
+			<view class="total">
+				<view class="">
+					Total
+				</view>
+				<view class="">
+					¥520
+				</view>
+			</view>
+			<view class="">
+				<view class="btn"><text>PROCEED</text></view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -42,47 +71,7 @@
 	export default {
 		data() {
 			return {
-				list: [{
-						id: 1,
-						title: 'hello',
-						images: '../../static/109951165817048673.jpg',
-						show: false
-					},
-					{
-						id: 2,
-						title: '新丰绿树起黄埃，数骑渔阳探使回，霓裳一曲千峰上，舞破中原始下来',
-						images: '../../static/109951165817048673.jpg',
-						show: false
-					},
-					{
-						id: 3,
-						title: '登临送目，正故国晚秋，天气初肃。千里澄江似练，翠峰如簇',
-						images: '../../static/109951165817048673.jpg',
-						show: false,
-					},
-					{
-						id: 4,
-						title: '登临送目，正故国晚秋，天气初肃。千里澄江似练，翠峰如簇',
-						images: '../../static/109951165817048673.jpg',
-						show: false,
-					}, {
-						id: 5,
-						title: '登临送目，正故国晚秋，天气初肃。千里澄江似练，翠峰如簇',
-						images: '../../static/109951165817048673.jpg',
-						show: false,
-					},
-					{
-						id: 6,
-						title: '登临送目，正故国晚秋，天气初肃。千里澄江似练，翠峰如簇',
-						images: '../../static/109951165817048673.jpg',
-						show: false,
-					}, {
-						id: 7,
-						title: '登临送目，正故国晚秋，天气初肃。千里澄江似练，翠峰如簇',
-						images: '../../static/109951165817048673.jpg',
-						show: false,
-					}
-				],
+				list: [],
 				disabled: false,
 				btnWidth: 180,
 				show: false,
@@ -99,7 +88,10 @@
 						}
 					}
 				],
-				selectValue: 0
+				selectValue: 0,
+				price: '',
+				total: '',
+				freight: ''
 			}
 		},
 		onLoad() {
@@ -112,25 +104,60 @@
 			user.isUserLogin()
 		},
 		methods: {
-			getCarList(){
-				this.$u.api.getCartList().then(res=>{
-					console.log(res)
+			getCarList() {
+				this.$u.api.getCartList().then(res => {
+					res.data.forEach(item=>{
+						item.checked=item.is_checked
+					})
+					this.list = res.data
 				})
 			},
-			change(name) {
-				console.log(name)
-				console.log(this.selectValue)
+			async change(i) {
+				let indexData = []
+				let is_checked = this.list[i].is_checked
+				console.log(is_checked)
+				this.list.forEach((item,index) => {
+					if (is_checked) {
+						console.log(is_checked)
+						if (i !== index && item.is_checked) {
+							indexData.push(item.id)
+						}
+					} else {
+						console.log(i)
+						if (i==index||item.is_checked) {
+							indexData.push(item.id)
+						}
+					}
+					console.log(this.list[i])
+				})
+				console.log(indexData)
+				const result=await this.$u.api.selectCar(indexData)
+				if(result.statusCode==204){
+					await this.getCarList()
+				}
+				console.log(this.list)
+			},
+			open(e) {
+				console.log(e)
+			},
+			click(e) {
+				console.log(e)
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	page {
+		height: 100%;
+	}
+
 	.container {
 		width: 100%;
+		height: 100%;
 
 		.title {
-			margin-top: 30rpx;
+			margin-top: 10rpx;
 			padding-left: 40rpx;
 
 			.text {
@@ -146,7 +173,7 @@
 		}
 
 		.height {
-			height: 950rpx;
+			height: 47vh;
 		}
 
 		.goods {
@@ -159,10 +186,14 @@
 
 				.info {
 					padding-top: 0;
-					margin-top: -25rpx;
+					margin-top: -15rpx;
 					// padding: 0;
-					margin-left: 0;
+					margin-left: 10rpx;
 					padding-right: 30rpx;
+
+					.price {
+						font-weight: 600;
+					}
 				}
 			}
 
@@ -186,5 +217,43 @@
 			}
 		}
 
+		.floor {
+			padding: 0 40rpx;
+			border-bottom: 0.5px solid #ddd;
+
+			.price,
+			.freight {
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 10rpx;
+			}
+		}
+
+		.floor-2 {
+			margin-top: 30rpx;
+			width: 100%;
+			position: fixed;
+			padding: 0 40rpx;
+			bottom: 130rpx;
+
+			.total {
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 20rpx;
+				font-size: 30rpx;
+				font-weight: 600;
+			}
+
+			.btn {
+				color: white;
+				width: 98%;
+				height: 90rpx;
+				background-color: #333;
+				border-radius: 40rpx;
+				text-align: center;
+				line-height: 90rpx;
+				margin: 0 auto;
+			}
+		}
 	}
 </style>
