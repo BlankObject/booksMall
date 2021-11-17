@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "商品详情",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "u-tabs": "/node-modules/uview-ui/components/u-tabs/u-tabs",
+    "goods-detail": "/components/goods-detail/goods-detail",
+    "goods-comments": "/components/goods-comments/goods-comments",
+    "goods-demo": "/components/goods-demo/goods-demo",
+    "u-icon": "/node-modules/uview-ui/components/u-icon/u-icon",
+    "u-badge": "/node-modules/uview-ui/components/u-badge/u-badge",
+    "u-toast": "/node-modules/uview-ui/components/u-toast/u-toast",
+    "u-skeleton": "/node-modules/uview-ui/components/u-skeleton/u-skeleton"
+  }
+}

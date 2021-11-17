@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "首页",
+  "usingComponents": {
+    "u-search": "/node-modules/uview-ui/components/u-search/u-search",
+    "u-swiper": "/node-modules/uview-ui/components/u-swiper/u-swiper",
+    "u-sticky": "/node-modules/uview-ui/components/u-sticky/u-sticky",
+    "u-tabs": "/node-modules/uview-ui/components/u-tabs/u-tabs",
+    "u-row": "/node-modules/uview-ui/components/u-row/u-row",
+    "u-col": "/node-modules/uview-ui/components/u-col/u-col",
+    "u-image": "/node-modules/uview-ui/components/u-image/u-image",
+    "u-skeleton": "/node-modules/uview-ui/components/u-skeleton/u-skeleton",
+    "u-back-top": "/node-modules/uview-ui/components/u-back-top/u-back-top"
+  }
+}

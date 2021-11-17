@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "修改地址",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "u-button": "/node-modules/uview-ui/components/u-button/u-button",
+    "u-picker": "/node-modules/uview-ui/components/u-picker/u-picker"
+  }
+}
